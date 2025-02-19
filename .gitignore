@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Build output
+ravencode-go-firebase-adminsdk-fbsvc-26ed5e1097.json
