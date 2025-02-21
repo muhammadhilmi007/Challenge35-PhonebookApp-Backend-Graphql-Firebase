@@ -21,33 +21,36 @@ const FirebaseService = {
         });
       });
 
-      // Apply search filter
+      // First apply search filter
       if (search) {
+        const searchLower = search.toLowerCase();
         contacts = contacts.filter(contact => 
-          contact.name.toLowerCase().includes(search.toLowerCase()) ||
-          contact.phone.includes(search)
+          contact.name.toLowerCase().includes(searchLower) ||
+          contact.phone.toLowerCase().includes(searchLower)
         );
       }
 
-      // Apply sorting
+      // Then apply sorting to filtered results
       contacts.sort((a, b) => {
-        const aValue = a[sortBy]?.toLowerCase?.() || '';
-        const bValue = b[sortBy]?.toLowerCase?.() || '';
+        const aValue = (a[sortBy] || '').toLowerCase();
+        const bValue = (b[sortBy] || '').toLowerCase();
         return sortOrder === 'asc' ? 
           aValue.localeCompare(bValue) : 
           bValue.localeCompare(aValue);
       });
 
-      // Apply pagination
+      // Finally apply pagination to sorted results
       const total = contacts.length;
-      const paginatedContacts = contacts.slice((page - 1) * limit, page * limit);
+      const pages = Math.ceil(total / limit);
+      const startIndex = (page - 1) * limit;
+      const paginatedContacts = contacts.slice(startIndex, startIndex + limit);
 
       return {
         contacts: paginatedContacts,
         total,
         page,
         limit,
-        pages: Math.ceil(total / limit)
+        pages
       };
     } catch (error) {
       throw new Error(`Failed to fetch contacts: ${error.message}`);

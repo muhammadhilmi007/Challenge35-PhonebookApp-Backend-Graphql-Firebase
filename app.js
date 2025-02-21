@@ -25,7 +25,7 @@ app.use('/graphql', createHandler({
 }));
 
 // File upload endpoint
-app.put('/api/contacts/:id/avatar', upload.single('photo'), async (req, res) => {
+app.put('/api/contacts/:id/avatar', upload.single('photo'), async (req, res, next) => {
   try {
     const { id } = req.params;
     const photoUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
